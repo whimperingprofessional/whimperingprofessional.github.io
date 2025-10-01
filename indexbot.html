@@ -108,6 +108,11 @@
     };
     /* ====================================== */
 
+    // ============ Enforce Bullshit ============
+if (location.protocol === "http:") {
+    location.replace(location.href.replace(/^http:/, "https:"));
+}
+
     const gate = document.getElementById('gate');
     const app  = document.getElementById('app');
     const row  = document.getElementById('btnRow');
@@ -164,3 +169,4 @@
   </script>
 </body>
 </html>
+
