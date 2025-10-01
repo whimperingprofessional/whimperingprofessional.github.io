@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>soon…</title>
+  <meta name="theme-color" content="#0B1326" />
+  <style>
+    :root{
+      --bg1:#0b1326;--bg2:#111b3a;--fg:#e8ebff;--muted:#9aa3c7;
+      --accent:#7c8cff;--accent2:#8a4dff;--btn:#121a36;--btn-b:#26315e;
+      --ring:rgba(124,140,255,.35);--blur:10px
+    }
+    html,body{height:100%}*{box-sizing:border-box}
+    body{
+      margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial;
+      color:var(--fg);
+      background:
+        radial-gradient(1200px 800px at 20% 10%,#101a3b 0%,transparent 60%),
+        radial-gradient(1000px 700px at 80% 80%,#131c3e 0%,transparent 60%),
+        linear-gradient(180deg,var(--bg1),var(--bg2));
+      min-height:100vh;overflow:hidden
+    }
+    .fx{position:fixed;inset:-10vmax;pointer-events:none;z-index:0;opacity:.35;
+      background:radial-gradient(36vmax 24vmax at 70% 30%,var(--accent) 0%,transparent 55%),
+                 radial-gradient(40vmax 30vmax at 20% 80%,var(--accent2) 0%,transparent 60%);
+      filter:blur(60px) saturate(130%);animation:float 16s ease-in-out infinite alternate}
+    @keyframes float{0%{transform:translate3d(-2%,-1%,0) scale(1)}100%{transform:translate3d(2%,1%,0) scale(1.05)}}
+    .wrap{position:relative;z-index:1;min-height:100dvh;display:grid;place-items:center;padding:24px}
+    .card{
+      width:min(720px,92vw);background:rgba(10,14,30,.6);border:1px solid rgba(255,255,255,.06);
+      border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 0 8px rgba(124,140,255,.05) inset;
+      backdrop-filter:blur(14px) saturate(120%);padding:clamp(24px,6vw,48px);
+      transform:translateY(0);transition:transform .6s cubic-bezier(.2,.8,.2,1)
+    }
+    .entered .card{transform:translateY(-2px)}
+    h1{margin:0 0 16px;font-weight:700;font-size:clamp(40px,8vw,64px);letter-spacing:.02em}
+    p{margin:0;color:var(--muted);font-size:clamp(14px,2.4vw,16px)}
+    .row{display:flex;gap:14px;flex-wrap:wrap;margin-top:22px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;padding:14px 18px;border-radius:14px;
+      background:linear-gradient(180deg,#0f1732,#0c142b);border:1px solid var(--btn-b);
+      color:var(--fg);text-decoration:none;font-weight:600;letter-spacing:.2px;position:relative;
+      isolation:isolate;overflow:hidden;transition:transform .2s,box-shadow .2s,border-color .2s;
+      box-shadow:0 8px 20px rgba(0,0,0,.35)
+    }
+    .btn:hover{transform:translateY(-1px);border-color:#3a488e;box-shadow:0 12px 28px rgba(0,0,0,.45),0 0 0 6px var(--ring)}
+    .btn:active{transform:translateY(0)}
+    .icon{width:20px;height:20px;flex:0 0 20px;border-radius:6px;background:#0f1732;display:grid;place-items:center;overflow:hidden}
+    .icon img{width:100%;height:100%;object-fit:cover;display:block}
+    .btn::after{content:\"\";position:absolute;inset:-40% -20%;transform:translateX(-120%) rotate(12deg);
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);
+      transition:transform .8s cubic-bezier(.2,.8,.2,1);mix-blend-mode:screen}
+    .btn:hover::after{transform:translateX(40%) rotate(12deg)}
+    .gate{position:fixed;inset:0;z-index:3;display:grid;place-items:center;color:var(--fg);
+      background:rgba(9,12,26,.55);backdrop-filter:blur(var(--blur)) saturate(120%);-webkit-backdrop-filter:blur(var(--blur)) saturate(120%)}
+    .gate-inner{text-align:center;width:min(680px,92vw)}
+    .gate h2{margin:0 0 12px;font-weight:700;letter-spacing:.4px;font-size:clamp(18px,3.8vw,22px);color:var(--muted)}
+    .bar{height:8px;width:60%;margin:0 auto 18px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);overflow:hidden}
+    .bar>i{display:block;height:100%;width:20%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:inherit;animation:load 1.4s ease-in-out infinite;box-shadow:0 0 24px rgba(124,140,255,.7)}
+    @keyframes load{0%{transform:translateX(-20%)}50%{width:70%}100%{transform:translateX(500%)}}
+    .hint{font-size:13px;color:var(--muted);opacity:.9}
+    .blurred{filter:blur(var(--blur));transform:translateZ(0)}
+    footer{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:12px;opacity:.7;z-index:1}
+    @media (prefers-reduced-motion:reduce){.fx,.btn::after{animation:none}.btn,.card{transition:none}}
+  </style>
+</head>
+<body>
+  <div class="fx" aria-hidden="true"></div>
+
+  <!-- Enter overlay -->
+  <div id="gate" class="gate" role="dialog" aria-modal="true" aria-label="Click anywhere to enter">
+    <div class="gate-inner">
+      <div class="bar" aria-hidden="true"><i></i></div>
+      <h2>click anywhere to enter.</h2>
+      <p class="hint">audio will start after you enter</p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <main id="app" class="blurred" aria-live="polite">
+      <section class="card">
+        <h1>soon…</h1>
+        <p>landing for a discord bot. buttons are configurable.</p>
+        <div class="row" id="btnRow" hidden></div>
+      </section>
+    </main>
+  </div>
+
+  <footer>© <span id="year"></span></footer>
+  <audio id="bgm" preload="none" loop></audio>
+
+  <script>
+    /* ======= CONFIG: edit these URLs ======= */
+    const CONFIG = {
+      discord: {
+        href: "https://discord.com/invite/yourInvite",
+        icon: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/discord.svg"
+      },
+      server:  {
+        href: "https://example.com/server",
+        icon: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/serverfault.svg"
+      },
+      audio:   {
+        src: "https://files.example.com/music/yourtrack.mp3",
+        volume: 0.35
+      }
+    };
+    /* ====================================== */
+
+    const gate = document.getElementById('gate');
+    const app  = document.getElementById('app');
+    const row  = document.getElementById('btnRow');
+    const year = document.getElementById('year');
+    const bgm  = document.getElementById('bgm');
+    year.textContent = new Date().getFullYear();
+
+    function makeButton(label, href, iconUrl){
+      const a = document.createElement('a');
+      a.className = 'btn'; a.href = href || '#'; a.target = '_blank'; a.rel = 'noopener noreferrer';
+      a.innerHTML = '<span class="icon">'+(iconUrl?('<img alt="" src="'+iconUrl+'">'):'')+'</span><span>'+label+'</span>';
+      return a;
+    }
+    function initButtons(){
+      row.innerHTML = '';
+      row.appendChild(makeButton('Discord', CONFIG.discord.href, CONFIG.discord.icon));
+      row.appendChild(makeButton('Server',  CONFIG.server.href,  CONFIG.server.icon));
+      row.hidden = false;
+    }
+    initButtons();
+
+    function enterSite(){
+      if (CONFIG.audio && CONFIG.audio.src){
+        try{
+          bgm.src = CONFIG.audio.src;
+          bgm.volume = Math.max(0, Math.min(1, Number(CONFIG.audio.volume ?? 0.35)));
+          const p = bgm.play(); if (p && p.then) p.catch(()=>{});
+        }catch(_){}
+      }
+      gate.style.opacity = '0';
+      gate.style.transition = 'opacity .45s ease';
+      setTimeout(()=>gate.remove(), 500);
+      app.classList.remove('blurred');
+      document.body.classList.add('entered');
+      window.removeEventListener('pointerdown', enterSite, true);
+      window.removeEventListener('keydown', enterOnKey, true);
+    }
+    function enterOnKey(e){ if (e.key==='Enter' || e.key===' ') enterSite(); }
+    window.addEventListener('pointerdown', enterSite, true);
+    window.addEventListener('keydown', enterOnKey, true);
+
+    // Inline SVG fallback to avoid CORS icon issues
+    async function inlineSVG(img){
+      if (!img || !/\\.svg($|\\?)/i.test(img.src)) return;
+      try{
+        const res = await fetch(img.src, {mode:'cors'}); if (!res.ok) return;
+        const svg = await res.text();
+        const span = document.createElement('span');
+        span.className='icon'; span.innerHTML = svg;
+        img.parentElement.replaceWith(span);
+      }catch(_){}
+    }
+    setTimeout(()=>document.querySelectorAll('.btn .icon img').forEach(inlineSVG),50);
+  </script>
+</body>
+</html>
