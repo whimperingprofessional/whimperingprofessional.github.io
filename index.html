@@ -91,7 +91,7 @@
   <audio id="bgm" preload="none" loop></audio>
 
   <script>
-    /* ======= CONFIG: edit these URLs ======= */
+    // config
     const CONFIG = {
       discord: {
         href: "https://discord.com/users/957683289991286805",
@@ -106,7 +106,7 @@
         volume: 0.10
       }
     };
-    /* ====================================== */
+    // end of config ^_^
 
     // ============ Enforce Bullshit ============
 if (location.protocol === "http:") {
@@ -154,7 +154,7 @@ if (location.protocol === "http:") {
     window.addEventListener('pointerdown', enterSite, true);
     window.addEventListener('keydown', enterOnKey, true);
 
-    // Inline SVG fallback to avoid CORS icon issues
+// safe fallback
     async function inlineSVG(img){
       if (!img || !/\\.svg($|\\?)/i.test(img.src)) return;
       try{
@@ -169,6 +169,7 @@ if (location.protocol === "http:") {
   </script>
 </body>
 </html>
+
 
 
 
