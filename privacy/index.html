@@ -57,9 +57,33 @@
     footer{margin-top:22px;font-size:12px;opacity:.7;text-align:center}
     hr{border:none;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);margin:18px 0}
     a{color:#ffd9ff}
+    /* make the page background ONE continuous gradient */
+body{ background:none; }              /* kill the old multi-layer body bg */
+
+.site-bg{
+  position:fixed;
+  inset:0;                           /* cover the whole viewport */
+  z-index:-1;                        /* sit behind everything */
+  pointer-events:none;
+
+  /* one unified stack; tweak sizes/positions if you like */
+  background:
+    radial-gradient(1200px 800px at 20% 10%, #bea0c0 0%, transparent 55%),
+    radial-gradient(1000px 700px at 80% 80%, #bea0c0 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+  background-repeat:no-repeat;
+  background-attachment:fixed;       /* no parallax seams */
+  filter: saturate(130%);
+}
+
+/* optional: if you don’t want the floating glow anymore, comment .fx out
+.fx{ display:none; }
+*/
+
   </style>
 </head>
 <body>
+  <div class="site-bg" aria-hidden="true"></div>
   <div class="fx" aria-hidden="true"></div>
   <div class="wrap">
     <main class="card" role="main">
