@@ -210,77 +210,87 @@ body{ background:none; }              /* kill the old multi-layer body bg */
     if (location.protocol === "http:") location.replace(location.href.replace(/^http:/, "https:"));
     document.getElementById('year').textContent = new Date().getFullYear();
 
-      // --- Loader controller (works across pages) ---
+  // --- Loader controller with 2.5s minimum display ---
   (function(){
-    const loader   = document.getElementById('loader');
-    const logo     = document.getElementById('loaderLogo');
+    const MIN_SHOW = 2500;                 // ms
     const ORIGIN   = location.origin;
 
-    // Show loader immediately (already visible in DOM)
-    // Hide once content is ready
-    function hideLoader(){
-      if (!loader || loader.classList.contains('out')) return;
-      // slide the logo down first, then fade the veil
-      loader.classList.add('out');
-      // remove from DOM after the transitions
-      setTimeout(()=> loader.remove(), 480);
+    let loader = document.getElementById('loader');
+    let logo   = document.getElementById('loaderLogo');
+
+    // If someone removed it (bfcache or SPA), recreate
+    function ensureLoader(){
+      loader = document.getElementById('loader');
+      if (!loader){
+        loader = document.createElement('div');
+        loader.id = 'loader'; loader.setAttribute('aria-hidden','true');
+        loader.innerHTML = `<img id="loaderLogo" alt="" src="${logo?.src || ''}">`;
+        document.body.appendChild(loader);
+      }
+      logo = document.getElementById('loaderLogo');
+      loader.classList.remove('out');
+      loader.style.opacity = '1';
+      if (logo) logo.style.transform = 'none';
+      return loader;
     }
 
-    // When the page is fully usable, dismiss
-    // (use DOMContentLoaded fallback + images)
+    // show immediately & remember when we started
+    const startAt = performance.now();
+    ensureLoader();
+
+    function hideLoaderAfterMin(){
+      const elapsed = performance.now() - startAt;
+      const wait = Math.max(0, MIN_SHOW - elapsed);
+      setTimeout(()=>{
+        if (!loader || loader.classList.contains('out')) return;
+        loader.classList.add('out');                // slide logo down (CSS) + fade veil
+        setTimeout(()=> loader && loader.remove(), 480);
+      }, wait);
+    }
+
+    // When page finishes loading, dismiss after we hit MIN_SHOW
     if (document.readyState === 'complete'){
-      setTimeout(hideLoader, 120);
+      hideLoaderAfterMin();
     } else {
-      window.addEventListener('load',   () => setTimeout(hideLoader, 120), { once:true });
-      document.addEventListener('DOMContentLoaded', () => {/* optional: do things earlier */}, { once:true });
+      window.addEventListener('load', hideLoaderAfterMin, { once:true });
     }
 
-    // Intercept same-origin navigations to show loader before leaving
+    // Intercept same-origin navigations: show loader for MIN_SHOW, THEN navigate
     function isSameSite(href){
-      try{
-        const u = new URL(href, location.href);
-        return u.origin === ORIGIN && u.hash === '' && u.pathname !== location.pathname;
-      }catch{ return false; }
+      try{ const u = new URL(href, location.href); return u.origin === ORIGIN && u.hash === ''; }
+      catch { return false; }
     }
-
     document.addEventListener('click', (e)=>{
       const a = e.target.closest('a');
       if (!a) return;
-      // ignore new tabs, downloads, hash links, or external
       if (a.target === '_blank' || a.hasAttribute('download') || a.href.includes('#')) return;
       if (!isSameSite(a.href)) return;
 
       e.preventDefault();
-      // re-insert loader if it was removed (for back/forward cache cases)
-      if (!document.getElementById('loader')){
-        const again = loader.cloneNode(true);
-        again.classList.remove('out');
-        document.body.appendChild(again);
-      } else {
-        loader.classList.remove('out');
-        loader.style.opacity = '1';
-        if (logo) logo.style.transform = 'none';
-      }
-      // small delay so users see the pulse, then navigate
-      setTimeout(()=>{ location.href = a.href; }, 120);
+      ensureLoader();
+      // wait full MIN_SHOW before navigating away
+      setTimeout(()=>{ location.href = a.href; }, MIN_SHOW);
     }, true);
 
-    // Handle back/forward cache: show loader briefly then hide
+    // bfcache restore: flash loader for consistency (still honors MIN_SHOW)
     window.addEventListener('pageshow', (ev)=>{
-      if (ev.persisted) {
-        // was restored from bfcache; flash the loader for consistency
-        const again = document.getElementById('loader');
-        if (again){
-          again.classList.remove('out'); again.style.opacity='1';
-          setTimeout(hideLoader, 150);
-        }
+      if (ev.persisted){
+        ensureLoader();
+        const againStart = performance.now();
+        setTimeout(()=>{
+          const elapsed = performance.now() - againStart;
+          const wait = Math.max(0, MIN_SHOW - elapsed);
+          setTimeout(()=>{
+            loader.classList.add('out');
+            setTimeout(()=> loader && loader.remove(), 480);
+          }, wait);
+        }, 0);
       }
     });
 
-    // Optional: show loader on manual reloads too (it's already visible on first paint)
+    // on reload/unload keep loader visible (browser may briefly show it)
     window.addEventListener('beforeunload', ()=>{
-      // keep it visible during the tear-down (some browsers show it briefly)
-      if (loader){ loader.style.opacity='1'; loader.classList.remove('out'); }
+      ensureLoader();
     });
   })();
   </script>
