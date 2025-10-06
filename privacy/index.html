@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy</title>
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#0B1326" />
+  <meta name="description" content="Our privacy policy." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nohopeleftfor.us/privacy" />
+  <meta property="og:title" content="Privacy Policy" />
+  <meta property="og:description" content="How we collect, use, and protect information for our Discord bot." />
+  <style>
+    :root{
+      --bg1:#0b1326;--bg2:#111b3a;--fg:#e8ebff;--muted:#c9ccef;
+      --accent:#F7D7F8;--accent2:#ffe7ff;--btn:#121a36;--btn-b:#26315e;
+      --ring:rgba(124,140,255,.35)
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial;
+      color:var(--fg);
+      background:
+        radial-gradient(1200px 800px at 20% 10%,#bea0c0 0%,transparent 100%),
+        radial-gradient(1000px 700px at 80% 80%,#bea0c0 0%,transparent 100%),
+        linear-gradient(180deg,var(--bg1),var(--bg2));
+      min-height:100vh;
+    }
+    .fx{position:fixed;inset:-10vmax;pointer-events:none;z-index:0;opacity:.35;
+      background:radial-gradient(36vmax 24vmax at 70% 30%,var(--accent) 0%,transparent 55%),
+                 radial-gradient(40vmax 30vmax at 20% 80%,var(--accent2) 0%,transparent 60%);
+      filter:blur(60px) saturate(130%);
+      animation:float 16s ease-in-out infinite alternate}
+    @keyframes float{0%{transform:translate3d(-2%,-1%,0) scale(1)}100%{transform:translate3d(2%,1%,0) scale(1.05)}}
+    .wrap{position:relative;z-index:1;min-height:100dvh;display:grid;place-items:center;padding:24px}
+    .card{
+      width:min(960px,92vw);background:rgba(10,14,30,.6);border:1px solid rgba(255,255,255,.06);
+      border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.5),0 0 0 8px rgba(124,140,255,.05) inset;
+      backdrop-filter:blur(14px) saturate(120%);padding:clamp(24px,6vw,48px);line-height:1.6
+    }
+    h1{margin:0 0 8px;font-weight:800;font-size:clamp(34px,6vw,48px);letter-spacing:.02em}
+    h2{margin:28px 0 8px;font-size:clamp(18px,3vw,22px)}
+    p{margin:0 0 12px;color:var(--muted)}
+    ul{margin:8px 0 16px 22px;color:var(--muted)}
+    code{background:rgba(255,255,255,.06);padding:.1em .4em;border-radius:6px}
+    .meta{opacity:.8;font-size:13px;margin-bottom:12px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:14px;
+      background:linear-gradient(180deg,#0f1732,#0c142b);border:1px solid var(--btn-b);
+      color:var(--fg);text-decoration:none;font-weight:600;letter-spacing:.2px;
+      transition:transform .2s,box-shadow .2s,border-color .2s
+    }
+    .btn:hover{transform:translateY(-1px);border-color:#3a488e;box-shadow:0 12px 28px rgba(0,0,0,.45),0 0 0 6px var(--ring)}
+    footer{margin-top:22px;font-size:12px;opacity:.7;text-align:center}
+    hr{border:none;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);margin:18px 0}
+    a{color:#ffd9ff}
+  </style>
+</head>
+<body>
+  <div class="fx" aria-hidden="true"></div>
+  <div class="wrap">
+    <main class="card" role="main">
+      <h1>Privacy Policy</h1>
+      <div class="meta">Effective date: <strong>16 August 2025</strong> • Product: <strong>sorrow</strong> (Discord bot) • Site: <strong>nohopeleftfor.us</strong></div>
+      <p>We care about your privacy. This policy explains what information we collect, how we use it, and the choices you have when using the <em>sorrow</em> Discord bot and this website.</p>
+
+      <h2>1. Who we are</h2>
+      <p><strong>Controller:</strong> Endrosity (site owner & bot developer). Best contact: Discord user <code>@Endrosity</code> (UID 957683289991286805) or the support server.</p>
+
+      <h2>2. What we collect</h2>
+      <p><strong>On the website (nohopeleftfor.us)</strong></p>
+      <ul>
+        <li><em>Basic logs</em> (IP address, user-agent, pages, timestamps) for security and abuse prevention. We don’t run ad tech or third-party trackers.</li>
+        <li><em>Cookies</em>: none set by us except essential session/security cookies if we enable an auth page in the future.</li>
+      </ul>
+      <p><strong>In the Discord bot</strong></p>
+      <ul>
+        <li><em>Discord identifiers</em> (user ID, guild ID, channel ID) to provide commands and rate-limit abuse.</li>
+        <li><em>Epic device auth</em> (account_id, device_id, secret) <em>only</em> if you run <code>/sc login</code> for the skin checker. We store this solely to access your Fortnite locker on your behalf.</li>
+        <li><em>Command usage metadata</em> (timestamps, options you pass) for troubleshooting and improving features.</li>
+      </ul>
+
+      <h2>3. How we use information</h2>
+      <ul>
+        <li>Provide core features (e.g., show your Fortnite locker, render images, respond to commands).</li>
+        <li>Secure the service (detect abuse, rate-limit, debug outages).</li>
+        <li>Comply with legal requests if we are required to do so.</li>
+      </ul>
+      <p>We do <strong>not</strong> sell your data. We do not profile or run ads.</p>
+
+      <h2>4. Legal bases</h2>
+      <p>If you are in the EEA/UK, we process:
+        <ul>
+          <li><em>Contract</em> — to deliver the bot features you request.</li>
+          <li><em>Legitimate interests</em> — to keep our services secure and functional.</li>
+          <li><em>Consent</em> — when you explicitly link Epic via <code>/sc login</code>.</li>
+        </ul>
+      </p>
+
+      <h2>5. Storage & security</h2>
+      <ul>
+        <li>Discord IDs and device auth are stored on our server in a restricted environment. We minimize access and audit admin actions.</li>
+        <li>Device auth is kept only for as long as you keep the account linked. Use <code>/sc logout</code> at any time to delete it immediately.</li>
+        <li>Server logs rotate regularly and are kept no longer than 30 days unless required for security or legal reasons.</li>
+      </ul>
+
+      <h2>6. Data sharing</h2>
+      <p>We share data only with infrastructure/service providers necessary to run the bot and website (e.g., hosting, CDN, Discord’s APIs, Epic Games’ APIs for the locker check). We do not share data with advertisers.</p>
+
+      <h2>7. Your choices & rights</h2>
+      <ul>
+        <li><strong>Unlink Epic:</strong> run <code>/sc logout</code> to delete stored device auth immediately.</li>
+        <li><strong>Delete bot data:</strong> DM <code>@Endrosity</code> or open a ticket in the support server with your Discord ID; we’ll remove bot-stored data associated with you.</li>
+        <li><strong>Access/Correction:</strong> contact us to view or correct information we hold about you.</li>
+        <li><strong>Consent withdrawal:</strong> you can revoke the device login in Epic account settings and/or run <code>/sc logout</code>.</li>
+      </ul>
+
+      <h2>8. Children’s privacy</h2>
+      <p>Our services are intended for users who meet Discord’s minimum age requirements in their region. We do not knowingly collect personal information from children under 13 (or the age required by local law). If you believe a child has provided data, contact us and we’ll delete it.</p>
+
+      <h2>9. International transfers</h2>
+      <p>We may process and store information on servers located in the United States or other regions. We take steps to protect data in accordance with this policy regardless of location.</p>
+
+      <h2>10. Changes to this policy</h2>
+      <p>We may update this policy from time to time. We’ll change the “Effective date” above and, if the changes are material, we’ll post a notice in the support server or on this page.</p>
+
+      <h2>11. Contact</h2>
+      <p>Questions or requests? Reach us on Discord:
+        <ul>
+          <li>User: <code>@Endrosity</code> (UID 957683289991286805)</li>
+          <li>Support server: <a href="https://discord.gg/rUn264WQMs" target="_blank" rel="noopener noreferrer">discord.gg/rUn264WQMs</a></li>
+        </ul>
+      </p>
+
+      <hr />
+      <div class="row">
+        <a class="btn" href="/" title="Home">← Back to site</a>
+        <a class="btn" href="https://discord.gg/rUn264WQMs" target="_blank" rel="noopener">Support server</a>
+      </div>
+      <footer>© <span id="year"></span> nohopeleftfor.us</footer>
+    </main>
+  </div>
+  <script>
+    // Force HTTPS if served accidentally over HTTP
+    if (location.protocol === "http:") location.replace(location.href.replace(/^http:/, "https:"));
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
