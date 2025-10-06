@@ -80,9 +80,47 @@ body{ background:none; }              /* kill the old multi-layer body bg */
 .fx{ display:none; }
 */
 
+  /* -------- Page switch / loading overlay -------- */
+#loader{
+  position:fixed; inset:0; z-index:9999;
+  display:grid; place-items:center;
+  background:rgba(9,12,26,.72); /* glassy veil */
+  backdrop-filter:blur(12px) saturate(130%);
+  -webkit-backdrop-filter:blur(12px) saturate(130%);
+  opacity:1; transition:opacity .25s ease;
+}
+#loaderLogo{
+  width:min(180px,22vmin); height:auto; display:block;
+  filter:drop-shadow(0 0 18px rgba(247,215,248,.35));
+  animation:loaderPulse 1.2s ease-in-out infinite;
+  will-change:transform, filter;
+}
+@keyframes loaderPulse{
+  0%{ transform:scale(.96); filter:drop-shadow(0 0 12px rgba(247,215,248,.25)); }
+  50%{ transform:scale(1.03); filter:drop-shadow(0 0 28px rgba(247,215,248,.55)); }
+  100%{ transform:scale(.96); filter:drop-shadow(0 0 12px rgba(247,215,248,.25)); }
+}
+/* exit animation: logo slides down, overlay fades */
+#loader.out{ opacity:0; }
+#loader.out #loaderLogo{
+  animation:none;
+  transform:translateY(40vh);
+  transition:transform .42s cubic-bezier(.2,.8,.2,1);
+}
+/* accessibility: honor reduced motion */
+@media (prefers-reduced-motion:reduce){
+  #loaderLogo{ animation:none }
+  #loader.out #loaderLogo{ transform:none }
+}
+
+
   </style>
 </head>
 <body>
+    <!-- Page switch / loading overlay -->
+  <div id="loader" aria-hidden="true">
+    <img id="loaderLogo" src="https://pleasedontleave.me/cdn/501567ac01ee4a688b8e2c45/belleee.png" alt="" />
+  </div>
   <div class="site-bg" aria-hidden="true"></div>
   <div class="fx" aria-hidden="true"></div>
   <div class="wrap">
@@ -171,6 +209,80 @@ body{ background:none; }              /* kill the old multi-layer body bg */
     // Force HTTPS if served accidentally over HTTP
     if (location.protocol === "http:") location.replace(location.href.replace(/^http:/, "https:"));
     document.getElementById('year').textContent = new Date().getFullYear();
+
+      // --- Loader controller (works across pages) ---
+  (function(){
+    const loader   = document.getElementById('loader');
+    const logo     = document.getElementById('loaderLogo');
+    const ORIGIN   = location.origin;
+
+    // Show loader immediately (already visible in DOM)
+    // Hide once content is ready
+    function hideLoader(){
+      if (!loader || loader.classList.contains('out')) return;
+      // slide the logo down first, then fade the veil
+      loader.classList.add('out');
+      // remove from DOM after the transitions
+      setTimeout(()=> loader.remove(), 480);
+    }
+
+    // When the page is fully usable, dismiss
+    // (use DOMContentLoaded fallback + images)
+    if (document.readyState === 'complete'){
+      setTimeout(hideLoader, 120);
+    } else {
+      window.addEventListener('load',   () => setTimeout(hideLoader, 120), { once:true });
+      document.addEventListener('DOMContentLoaded', () => {/* optional: do things earlier */}, { once:true });
+    }
+
+    // Intercept same-origin navigations to show loader before leaving
+    function isSameSite(href){
+      try{
+        const u = new URL(href, location.href);
+        return u.origin === ORIGIN && u.hash === '' && u.pathname !== location.pathname;
+      }catch{ return false; }
+    }
+
+    document.addEventListener('click', (e)=>{
+      const a = e.target.closest('a');
+      if (!a) return;
+      // ignore new tabs, downloads, hash links, or external
+      if (a.target === '_blank' || a.hasAttribute('download') || a.href.includes('#')) return;
+      if (!isSameSite(a.href)) return;
+
+      e.preventDefault();
+      // re-insert loader if it was removed (for back/forward cache cases)
+      if (!document.getElementById('loader')){
+        const again = loader.cloneNode(true);
+        again.classList.remove('out');
+        document.body.appendChild(again);
+      } else {
+        loader.classList.remove('out');
+        loader.style.opacity = '1';
+        if (logo) logo.style.transform = 'none';
+      }
+      // small delay so users see the pulse, then navigate
+      setTimeout(()=>{ location.href = a.href; }, 120);
+    }, true);
+
+    // Handle back/forward cache: show loader briefly then hide
+    window.addEventListener('pageshow', (ev)=>{
+      if (ev.persisted) {
+        // was restored from bfcache; flash the loader for consistency
+        const again = document.getElementById('loader');
+        if (again){
+          again.classList.remove('out'); again.style.opacity='1';
+          setTimeout(hideLoader, 150);
+        }
+      }
+    });
+
+    // Optional: show loader on manual reloads too (it's already visible on first paint)
+    window.addEventListener('beforeunload', ()=>{
+      // keep it visible during the tear-down (some browsers show it briefly)
+      if (loader){ loader.style.opacity='1'; loader.classList.remove('out'); }
+    });
+  })();
   </script>
 </body>
 </html>
