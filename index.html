@@ -105,7 +105,7 @@
 <body>
     <!-- Page switch / loading overlay -->
   <div id="loader" aria-hidden="true">
-    <img id="loaderLogo" src="https://pleasedontleave.me/cdn/501567ac01ee4a688b8e2c45/belleee.png" alt="" />
+    <img id="loaderLogo" src="https://files.catbox.moe/8xbr9y.png" alt="" />
   </div>
   <div class="fx" aria-hidden="true"></div>
 
@@ -121,7 +121,7 @@
     <main id="app" class="blurred" aria-live="polite">
       <section class="card">
         <h1>soon…</h1>
-        <p>as said, this bot is coming soon, you can use the alpha version of it in the server below. dm me for inquiries.</p>
+        <p>As said, this bot is coming soon, you can use the alpha version of it in the server below. dm me for inquiries.</p>
         <div class="row" id="btnRow" hidden></div>
       </section>
     </main>
@@ -140,6 +140,10 @@
       server:  {
         href: "https://discord.gg/VRXfhT5wJy",
         icon: "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/discord.svg"
+      },
+      privacy:  {
+        href: "https://nohopeleftfor.us/privacy",
+        icon: "https://files.catbox.moe/fctlwr.png"
       },
       audio:   {
         src: "https://pleasedontleave.me/cdn/5a1456a982af4517a5cb3505/K%20(Cover%20of%20Cigarettes%20After%20Sex).mp3",
@@ -170,6 +174,7 @@ if (location.protocol === "http:") {
       row.innerHTML = '';
       row.appendChild(makeButton('About', CONFIG.discord.href, CONFIG.discord.icon));
       row.appendChild(makeButton('Server',  CONFIG.server.href,  CONFIG.server.icon));
+      row.appendChild(makeButton('Privacy Policy',  CONFIG.privacy.href,  CONFIG.privacy.icon));
       row.hidden = false;
     }
     initButtons();
@@ -293,6 +298,7 @@ if (location.protocol === "http:") {
   </script>
 </body>
 </html>
+
 
 
 
